@@ -813,7 +813,7 @@ export default function MyGiftBoxSite() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="ml-2 px-4 py-2 rounded-lg font-semibold text-white transition-all duration-300 
-                             bg-[#25D366] hover:bg-gradient-to-r hover:from-[#25D366] hover:to-[#128C7E]"
+                             bg-[#] hover:bg-gradient-to-r hover:from-[#25D366] hover:to-[#128C7E]"
                   onClick={(e) => {
                     e.preventDefault();
                     triggerGo(WHATSAPP_LINK_BASE(`Hola, quiero comprar un kit de ${BRAND}.`));
