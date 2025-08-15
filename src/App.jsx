@@ -15,6 +15,8 @@ import {
   Instagram,
   MapPin,
   Clock,
+  Menu,
+  X,
 } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card";
@@ -734,6 +736,124 @@ export default function MyGiftBoxSite() {
   const [page, setPage] = useState(PAGES.LANDING);
   const [kitPage, setKitPage] = useState("KIT1");
 
+  // Nuevo estado para el menú en móviles
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Helper para cambiar página y cerrar menú en móviles
+  const go = (p) => {
+    setPage(p);
+    setMobileOpen(false);
+  };
+
+  return (
+    <>
+      {/* Navbar */}
+<header className="fixed top-0 inset-x-0 z-50">
+  <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div className="mt-4 mb-3 rounded-2xl bg-neutral-900/80 backdrop-blur border border-white/10">
+      {/* Barra superior */}
+      <div className="flex items-center justify-between px-3 py-2">
+        {/* Marca */}
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-white rounded-xl">
+            <Gift className="h-5 w-5 text-neutral-900" />
+          </div>
+          <div className="font-semibold text-white">{BRAND}</div>
+        </div>
+
+        {/* Botón menú (solo mobile) */}
+        <button
+          className="md:hidden inline-flex items-center justify-center rounded-xl text-white/90 hover:text-white p-2"
+          onClick={() => setMobileOpen((v) => !v)}
+          aria-label="Abrir menú"
+        >
+          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+
+        {/* Nav Desktop */}
+        <nav className="hidden md:flex items-center gap-1">
+          <NavLink label="Inicio" active={page===PAGES.LANDING} onClick={() => go(PAGES.LANDING)} />
+          <NavLink label="Kits" active={page===PAGES.KITS || page===PAGES.KIT} onClick={() => go(PAGES.KITS)} />
+          <NavLink label="Cómo funciona" active={page===PAGES.HOW} onClick={() => go(PAGES.HOW)} />
+          <NavLink label="Historia" active={page===PAGES.ABOUT} onClick={() => go(PAGES.ABOUT)} />
+          <NavLink label="Contacto" active={page===PAGES.CONTACT} onClick={() => go(PAGES.CONTACT)} />
+          <MBtn
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="ml-2 px-4 py-2 rounded-lg font-semibold text-white transition-all duration-300 
+                       bg-[#25D366] hover:bg-gradient-to-r hover:from-[#25D366] hover:to-[#128C7E]"
+            onClick={(e) => {
+              e.preventDefault();
+              triggerGo(WHATSAPP_LINK_BASE(`Hola, quiero comprar un kit de ${BRAND}.`));
+            }}
+          >
+            <Phone className="mr-2 h-4 w-4" /> Pedir por WhatsApp
+          </MBtn>
+        </nav>
+      </div>
+
+      {/* Panel Mobile */}
+      <div
+        className={`md:hidden overflow-hidden transition-[max-height] duration-300 ease-out ${
+          mobileOpen ? 'max-h-96' : 'max-h-0'
+        }`}
+      >
+        <div className="px-3 pb-3 pt-1">
+          <div className="flex flex-col">
+            <button
+              onClick={() => go(PAGES.LANDING)}
+              className={`text-left px-3 py-2 rounded-xl hover:bg-white/10 ${page===PAGES.LANDING ? 'text-white' : 'text-white/80'}`}
+            >
+              Inicio
+            </button>
+            <button
+              onClick={() => go(PAGES.KITS)}
+              className={`text-left px-3 py-2 rounded-xl hover:bg-white/10 ${page===PAGES.KITS || page===PAGES.KIT ? 'text-white' : 'text-white/80'}`}
+            >
+              Kits
+            </button>
+            <button
+              onClick={() => go(PAGES.HOW)}
+              className={`text-left px-3 py-2 rounded-xl hover:bg-white/10 ${page===PAGES.HOW ? 'text-white' : 'text-white/80'}`}
+            >
+              Cómo funciona
+            </button>
+            <button
+              onClick={() => go(PAGES.ABOUT)}
+              className={`text-left px-3 py-2 rounded-xl hover:bg-white/10 ${page===PAGES.ABOUT ? 'text-white' : 'text-white/80'}`}
+            >
+              Historia
+            </button>
+            <button
+              onClick={() => go(PAGES.CONTACT)}
+              className={`text-left px-3 py-2 rounded-xl hover:bg-white/10 ${page===PAGES.CONTACT ? 'text-white' : 'text-white/80'}`}
+            >
+              Contacto
+            </button>
+
+            {/* Botón WhatsApp destacado en mobile */}
+            <MBtn
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="mt-2 px-4 py-2 rounded-lg font-semibold text-white transition-all duration-300 
+                         bg-[#25D366] hover:bg-gradient-to-r hover:from-[#25D366] hover:to-[#128C7E]"
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileOpen(false);
+                triggerGo(WHATSAPP_LINK_BASE(`Hola, quiero comprar un kit de ${BRAND}.`));
+              }}
+            >
+              <Phone className="mr-2 h-4 w-4" /> Pedir por WhatsApp
+            </MBtn>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+    </>
+  );
+}
   // Confetti y navegación diferida a WhatsApp
   const [confetti, setConfetti] = useState(false);
   const [pendingUrl, setPendingUrl] = useState(null);
